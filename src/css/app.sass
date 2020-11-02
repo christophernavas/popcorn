@@ -1,1 +1,37 @@
 // app global css in Sass form
+@import url('https://fonts.googleapis.com/css2?family=Manuale:wght@400;700&display=swap');
+
+body
+  background-color: $primary
+
+h1
+  color: white
+  font-size: 3rem
+  font-weight: bold
+  font-family: 'Manuale', serif
+
+h2
+  color: white
+  font-size: 2rem
+  font-weight: regular
+  font-family: 'Manuale', serif
+
+.q-page-container
+  width: 1000px
+  margin: auto
+
+// Input
+
+.q-field__inner
+  border: solid 3px black
+  border-radius: 8px
+
+.q-field__control:before, .q-field__control:after
+  content: none
+
+.q-field__label
+  text-align: center
+
+// Button
+.q-btn
+  border: white solid 3px
