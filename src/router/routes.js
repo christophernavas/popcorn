@@ -8,6 +8,13 @@ const routes = [
     ]
   },
   {
+    path: '/quiz',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/QuizPage.vue') }
+    ]
+  },
+  {
     path: '/leaderboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [
