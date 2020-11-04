@@ -8,7 +8,7 @@
         Entrez votre pseudo pour commencer
       </h2>
         <q-form class="q-pt-md" style="max-width: 250px; margin:auto" @submit="onSubmit" @reset="onReset">
-          <q-input class="q-mb-xl" outlined  bg-color="white" label="Pseudo" v-model="text" input-class="text-center" />
+          <q-input class="q-mb-xl custom-input" outlined  bg-color="white" label="Pseudo" v-model="text" input-class="text-center" />
           <q-btn to="quiz" color="secondary" label="Jouer" size="20px"  class="full-width" />
         </q-form>
       </div>
