@@ -16,10 +16,27 @@ Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
-    modules: {
-      // example
+    state: {
+      user: {}
     },
-
+    mutations: {
+      set_user (state, user) {
+        state.user = user
+      },
+      set_score (state, score) {
+        state.user.score = score
+      }
+    },
+    actions: {
+      createUser ({ commit }, user) {
+        commit('set_user', user)
+      },
+      updateScore ({ commit }, score) {
+        commit('set_score', score)
+      }
+    },
+    getters: {
+    },
     // enable strict mode (adds overhead!)
     // for dev mode only
     strict: process.env.DEBUGGING
