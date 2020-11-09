@@ -15,11 +15,11 @@
       <div style="max-width: 600px;margin: auto;">
         <q-table :data="data.popcorn" :columns="columns" row-key="name" v-if="showPopcorn" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
-        <q-table :data="data.moviz" :columns="columns" row-key="name" v-if="showMoviz" hide-bottom virtual-scroll
+        <q-table :data="data.polarocean" :columns="columns" row-key="name" v-if="showPolarOcean" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
-        <q-table :data="data.wsfquiz" :columns="columns" row-key="name" v-if="showWSFquiz" hide-bottom virtual-scroll
+        <q-table :data="data.quizzpursuit" :columns="columns" row-key="name" v-if="showQuizzPursuit" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
-        <q-table :data="data.cinequiz" :columns="columns" row-key="name" v-if="showCinequiz" hide-bottom virtual-scroll
+        <q-table :data="data.adleyquizz" :columns="columns" row-key="name" v-if="showAdleyQuizz" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
         </div>
       <div class="q-pt-xl">
@@ -30,48 +30,73 @@
 </template>
 
 <script>
+const axios = require('axios')
+
 export default {
   methods: {
     onValueChange (val) {
       switch (val) {
         case 'Popcorn':
           this.showPopcorn = true
-          this.showMoviz = false
-          this.showWSFquiz = false
-          this.showCinequiz = false
+          this.showAdleyQuizz = false
+          this.showQuizzPursuit = false
+          this.showPolarOcean = false
           break
-        case 'Moviz':
+        case 'Polar Ocean':
           this.showPopcorn = false
-          this.showMoviz = true
-          this.showWSFquiz = false
-          this.showCinequiz = false
+          this.showAdleyQuizz = false
+          this.showQuizzPursuit = false
+          this.showPolarOcean = true
           break
-        case 'WSFquiz':
+        case 'Quizz Pursuit':
           this.showPopcorn = false
-          this.showMoviz = false
-          this.showWSFquiz = true
-          this.showCinequiz = false
+          this.showAdleyQuizz = false
+          this.showQuizzPursuit = true
+          this.showPolarOcean = false
           break
-        case 'Cinéquiz':
+        case 'Adley Quizz':
           this.showPopcorn = false
-          this.showMoviz = false
-          this.showWSFquiz = false
-          this.showCinequiz = true
+          this.showAdleyQuizz = true
+          this.showQuizzPursuit = false
+          this.showPolarOcean = false
           break
       }
+    },
+    getQuizLeaderboard (table, endpoint, limit) {
+      let url = ''
+      if (limit && limit > 0) {
+        url = endpoint + '/' + limit
+      } else {
+        url = endpoint
+      }
+      axios
+        .get(url)
+        .then(response => {
+          const scores = response.data.scores
+          let ranking = 0
+          scores.forEach(score => {
+            ranking += 1
+            table.push({
+              ranking: ranking,
+              username: score.username,
+              score: score.score
+            })
+          })
+        })
+        .catch(error => console.log(error))
     }
   },
   data () {
     return {
       theme: 'Popcorn',
       showPopcorn: true,
-      showMoviz: false,
-      showWSFquiz: false,
-      showCinequiz: false,
+      showPolarOcean: false,
+      showQuizzPursuit: false,
+      showAdleyQuizz: false,
       pagination: {
         rowsPerPage: 0
       },
-      options: ['Popcorn', 'Moviz', 'WSFquiz', 'Cinéquiz'],
+      options: ['Popcorn', 'Polar Ocean', 'Quizz Pursuit', 'Adley Quizz'],
       columns: [{
         name: 'ranking',
         align: 'left',
@@ -80,10 +105,10 @@ export default {
         sortable: true
       },
       {
-        name: 'id',
+        name: 'username',
         align: 'left',
-        label: 'ID',
-        field: 'id',
+        label: 'USERNAME',
+        field: 'username',
         sortable: true
       },
       {
@@ -96,152 +121,19 @@ export default {
       }
       ],
       data: {
-        popcorn: [{
-          ranking: 1,
-          id: 'Devon Lane',
-          score: '100'
-        },
-        {
-          ranking: 2,
-          id: 'Cody Fisher',
-          score: '90'
-        },
-        {
-          ranking: 3,
-          id: 'Jacob Jones',
-          score: '80'
-        },
-        {
-          ranking: 4,
-          id: 'Robert Fox',
-          score: '75'
-        },
-        {
-          ranking: 5,
-          id: 'Eleanor Pena',
-          score: '70'
-        },
-        {
-          ranking: 6,
-          id: 'Kathryn Murphy',
-          score: '50'
-        },
-        {
-          ranking: 687,
-          id: 'John Doe',
-          score: '10'
-        }
-        ],
-        moviz: [{
-          ranking: 1,
-          id: 'Cody Fisher',
-          score: '100'
-        },
-        {
-          ranking: 2,
-          id: 'Devon Lane',
-          score: '90'
-        },
-        {
-          ranking: 3,
-          id: 'Kathryn Murphy',
-          score: '85'
-        },
-        {
-          ranking: 4,
-          id: 'Jacob Jones',
-          score: '80'
-        },
-        {
-          ranking: 5,
-          id: 'Robert Fox',
-          score: '75'
-        },
-        {
-          ranking: 6,
-          id: 'Eleanor Pena',
-          score: '70'
-        },
-        {
-          ranking: 450,
-          id: 'John Doe',
-          score: '20'
-        }
-        ],
-        wsfquiz: [{
-          ranking: 1,
-          id: 'Devon Lane',
-          score: '100'
-        },
-        {
-          ranking: 2,
-          id: 'Cody Fisher',
-          score: '90'
-        },
-        {
-          ranking: 3,
-          id: 'Jacob Jones',
-          score: '80'
-        },
-        {
-          ranking: 4,
-          id: 'Robert Fox',
-          score: '75'
-        },
-        {
-          ranking: 5,
-          id: 'Eleanor Pena',
-          score: '70'
-        },
-        {
-          ranking: 6,
-          id: 'Kathryn Murphy',
-          score: '60'
-        },
-        {
-          ranking: 80,
-          id: 'John Doe',
-          score: '40'
-        }
-        ],
-        cinequiz: [{
-          ranking: 1,
-          id: 'Devon Lane',
-          score: '100'
-        },
-        {
-          ranking: 2,
-          id: 'Cody Fisher',
-          score: '90'
-        },
-        {
-          ranking: 3,
-          id: 'Jacob Jones',
-          score: '85'
-        },
-        {
-          ranking: 4,
-          id: 'Robert Fox',
-          score: '80'
-        },
-        {
-          ranking: 5,
-          id: 'Eleanor Pena',
-          score: '70'
-        },
-        {
-          ranking: 6,
-          id: 'Kathryn Murphy',
-          score: '65'
-        },
-        {
-          ranking: 125,
-          id: 'John Doe',
-          score: '30'
-        }
-        ]
+        popcorn: [],
+        polarocean: [],
+        quizzpursuit: [],
+        adleyquizz: []
       }
     }
+  },
+  mounted () {
+    const limit = 5
+    this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores', limit)
+    this.getQuizLeaderboard(this.data.polarocean, 'https://polar-ocean-73785.herokuapp.com/api/scores', limit)
+    this.getQuizLeaderboard(this.data.quizzpursuit, 'https://stagingquizzpursuit.herokuapp.com/api/scores', limit)
+    this.getQuizLeaderboard(this.data.adleyquizz, 'https://adley-quizz.herokuapp.com/api/scores', limit)
   }
 }
 </script>
