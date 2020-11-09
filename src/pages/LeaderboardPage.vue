@@ -72,8 +72,13 @@ export default {
       axios
         .get(url)
         .then(response => {
-          const scores = response.data.scores
+          let scores = {}
           let ranking = 0
+          if (response.data.scores) {
+            scores = response.data.scores
+          } else {
+            scores = response.data.data
+          }
           scores.forEach(score => {
             ranking += 1
             table.push({
@@ -130,7 +135,7 @@ export default {
   },
   mounted () {
     const limit = 5
-    this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores', limit)
+    this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores')
     this.getQuizLeaderboard(this.data.polarocean, 'https://polar-ocean-73785.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.quizzpursuit, 'https://stagingquizzpursuit.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.adleyquizz, 'https://adley-quizz.herokuapp.com/api/scores', limit)
