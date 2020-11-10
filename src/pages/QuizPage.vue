@@ -26,7 +26,7 @@
         </q-card-section>
       </q-card>
     </div>
-    <q-btn to="/" color="secondary" label="Envoyer" size="20px" />
+    <q-btn to="/leaderboard" color="secondary" label="Envoyer" size="20px" />
   </q-page>
 </template>
 
