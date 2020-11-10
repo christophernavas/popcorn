@@ -61,7 +61,8 @@ export default {
   mounted () {
     axios
       .get('https://wsf-popcorn-backend.herokuapp.com/api/questions')
-      .then(response => (this.questions = response.data.data))
+      .then(response => (this.questions = response.data.questions))
+      .catch(error => console.log(error))
   }
 }
 </script>
