@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex column items-center justify-center" padding>
     <!-- content -->
-    <q-form @submit="onSubmit" @reset="onReset">
+    <q-form @submit="onSubmit">
       <div class="text-left">
         <q-card v-for="(question, index) in questions" :key="index" flat bordered class="custom-card">
           <q-card-section>
@@ -32,21 +32,26 @@ import axios from 'axios'
 
 export default {
   methods: {
-    onSubmit (e) {
-      console.log(e)
+    calculateScore () {
+      let nbCorrect = 0
+      let nbQuestions = 0
+      this.questions.forEach(question => {
+        question.answers.forEach(answer => {
+          if (question.model === answer.answer) {
+            if (answer.isCorrect) {
+              nbCorrect += 1
+            }
+          }
+        })
+        nbQuestions += 1
+      })
+      return (Math.round(nbCorrect / nbQuestions * 100))
+    },
+    onSubmit () {
       const score = this.calculateScore()
       this.$store.dispatch('updateScore', score)
         .then(() => this.$router.push('/leaderboard'))
         .catch(err => console.log(err))
-    },
-    onReset () {
-      console.log('reset')
-    },
-    calculateScore () {
-      console.log('score')
-      let score = 0
-      score = 10
-      return score
     }
   },
   data () {
@@ -70,7 +75,6 @@ export default {
           question.options = options
           question.model = null
         })
-        console.log(questions)
         this.questions = questions
       })
       .catch(error => console.log(error))
