@@ -5,7 +5,7 @@
       <div class="text-left">
         <q-card v-for="(question, index) in questions" :key="index" flat bordered class="custom-card">
           <q-card-section>
-            <div class="card-title">La Casa de Papel</div>
+            <div class="card-title">{{ question.theme }}</div>
           </q-card-section>
 
           <q-separator color="secondary" inset />
@@ -46,26 +46,35 @@ export default {
       }
       return array
     },
-    getQuestions (url) {
+    getQuestions (array, url, theme) {
       axios
         .get(url)
         .then(response => {
           const questions = response.data.questions
+          let questionTheme = ''
           questions.forEach(question => {
             const options = []
+            if (question.theme) {
+              questionTheme = question.theme
+            } else if (theme) {
+              questionTheme = theme
+            } else {
+              questionTheme = 'La Casa de Papel'
+            }
             question.answers.forEach(answer => {
               options.push({
                 label: answer.answer,
                 value: answer.answer
               })
             })
+            question.theme = questionTheme
             question.options = options
             question.model = null
+            array.push(question)
           })
-          const shuffleQuestions = this.shuffle(questions)
-          this.questions = shuffleQuestions
         })
         .catch(error => console.log(error))
+      return array
     },
     calculateScore () {
       let nbCorrect = 0
@@ -91,11 +100,15 @@ export default {
   },
   data () {
     return {
-      questions: null
+      questions: []
     }
   },
   mounted () {
-    this.getQuestions('https://wsf-popcorn-backend.herokuapp.com/api/questions')
+    this.getQuestions(this.questions, 'https://wsf-popcorn-backend.herokuapp.com/api/questions')
+    this.getQuestions(this.questions, 'https://polar-ocean-73785.herokuapp.com/api/questions/random', 'Polar Ocean')
+    this.getQuestions(this.questions, 'https://stagingquizzpursuit.herokuapp.com/api/questions/random', 'Quizz Pursuit')
+    this.getQuestions(this.questions, 'https://adley-quizz.herokuapp.com/api/questions/random', 'Adley Quizz')
+    this.shuffle(this.questions)
   }
 }
 </script>
