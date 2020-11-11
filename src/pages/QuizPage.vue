@@ -32,6 +32,41 @@ import axios from 'axios'
 
 export default {
   methods: {
+    shuffle (array) {
+      let currentIndex = array.length, temporaryValue, randomIndex
+      // While there remain elements to shuffle...
+      while (currentIndex !== 0) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex]
+        array[currentIndex] = array[randomIndex]
+        array[randomIndex] = temporaryValue
+      }
+      return array
+    },
+    getQuestions (url) {
+      axios
+        .get(url)
+        .then(response => {
+          const questions = response.data.questions
+          questions.forEach(question => {
+            const options = []
+            question.answers.forEach(answer => {
+              options.push({
+                label: answer.answer,
+                value: answer.answer
+              })
+            })
+            question.options = options
+            question.model = null
+          })
+          const shuffleQuestions = this.shuffle(questions)
+          this.questions = shuffleQuestions
+        })
+        .catch(error => console.log(error))
+    },
     calculateScore () {
       let nbCorrect = 0
       let nbQuestions = 0
@@ -60,24 +95,7 @@ export default {
     }
   },
   mounted () {
-    axios
-      .get('https://wsf-popcorn-backend.herokuapp.com/api/questions')
-      .then(response => {
-        const questions = response.data.questions
-        questions.forEach(question => {
-          const options = []
-          question.answers.forEach(answer => {
-            options.push({
-              label: answer.answer,
-              value: answer.answer
-            })
-          })
-          question.options = options
-          question.model = null
-        })
-        this.questions = questions
-      })
-      .catch(error => console.log(error))
+    this.getQuestions('https://wsf-popcorn-backend.herokuapp.com/api/questions')
   }
 }
 </script>
