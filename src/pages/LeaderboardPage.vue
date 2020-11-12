@@ -63,10 +63,14 @@ export default {
       }
     },
     getQuizLeaderboard (table, endpoint, limit) {
-      let url = ''
+      const user = this.$store.state.user
+      let popcorn = false
+      let userData = null
+      let url = null
       if (limit && limit > 0) {
         url = endpoint + '/' + limit
       } else {
+        popcorn = true
         url = endpoint
       }
       axios
@@ -80,13 +84,30 @@ export default {
             scores = response.data.data
           }
           scores.forEach(score => {
+            // si user n'est pas dans le top :limit, on l'affiche en dessous du top :limit, donc à la suite du tableau
+            // sinon, on affiche user dans le top :limit
             ranking += 1
-            table.push({
-              ranking: ranking,
-              username: score.username,
-              score: score.score
-            })
+            if (popcorn && user.username && user.score && user.username === score.username && user.score === score.score && ranking > 10) {
+              userData = {
+                ranking: ranking,
+                username: user.username,
+                score: user.score
+              }
+            } else {
+              table.push({
+                ranking: ranking,
+                username: score.username,
+                score: score.score
+              })
+            }
           })
+          if (popcorn) {
+            this.data.popcorn = table.slice(0, 10)
+          }
+          if (userData != null) {
+            this.data.popcorn.push(userData)
+            this.$store.dispatch('resetState')
+          }
         })
         .catch(error => console.log(error))
     }
@@ -105,14 +126,14 @@ export default {
       columns: [{
         name: 'ranking',
         align: 'left',
-        label: 'RANKING #',
+        label: 'RANG #',
         field: 'ranking',
         sortable: true
       },
       {
         name: 'username',
         align: 'left',
-        label: 'USERNAME',
+        label: 'PSEUDO',
         field: 'username',
         sortable: true
       },
@@ -144,9 +165,8 @@ export default {
       }
       const response = await axios.post('https://wsf-popcorn-backend.herokuapp.com/api/scores/new', body)
       this.data.userId = response.data._id
-      this.$store.dispatch('resetState')
     }
-    this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores', limit)
+    this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores')
     this.getQuizLeaderboard(this.data.polarocean, 'https://polar-ocean-73785.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.quizzpursuit, 'https://stagingquizzpursuit.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.adleyquizz, 'https://adley-quizz.herokuapp.com/api/scores', limit)
