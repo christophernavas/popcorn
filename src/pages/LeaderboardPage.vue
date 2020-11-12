@@ -103,10 +103,10 @@ export default {
           })
           if (popcorn) {
             this.data.popcorn = table.slice(0, 10)
+            this.$store.dispatch('resetState')
           }
           if (userData != null) {
             this.data.popcorn.push(userData)
-            this.$store.dispatch('resetState')
           }
         })
         .catch(error => console.log(error))
