@@ -8,7 +8,7 @@
         Entrez votre pseudo pour commencer
       </h2>
         <q-form class="q-pt-md" style="max-width: 250px; margin:auto" @submit="onSubmit" @reset="onReset">
-          <q-input class="q-mb-xl" outlined  bg-color="white" label="Pseudo" v-model="username" input-class="text-center" />
+          <q-input class="q-mb-xl" outlined  bg-color="white" label="Pseudo" v-model="username" input-class="text-center" :rules="[val => !!val]"/>
           <q-btn type="submit" color="secondary" label="Jouer" size="20px"  class="full-width" />
         </q-form>
       </div>
@@ -21,8 +21,7 @@ export default {
   methods: {
     onSubmit: function () {
       const username = this.username
-      const score = 0
-      this.$store.dispatch('createUser', { username, score })
+      this.$store.dispatch('createUser', username)
         .then(() => this.$router.push('/quiz'))
         .catch(err => console.log(err))
     },

@@ -20,19 +20,25 @@ export default function (/* { ssrContext } */) {
       user: {}
     },
     mutations: {
-      set_user (state, user) {
-        state.user = user
+      setUsername (state, username) {
+        state.user.username = username
       },
-      set_score (state, score) {
+      setScore (state, score) {
         state.user.score = score
+      },
+      resetState (state) {
+        Object.assign(state, { user: {} })
       }
     },
     actions: {
-      createUser ({ commit }, user) {
-        commit('set_user', user)
+      createUser ({ commit }, username) {
+        commit('setUsername', username)
       },
       updateScore ({ commit }, score) {
-        commit('set_score', score)
+        commit('setScore', score)
+      },
+      resetState ({ commit }) {
+        commit('resetState')
       }
     },
     getters: {
