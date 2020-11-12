@@ -144,6 +144,7 @@ export default {
       }
       const response = await axios.post('https://wsf-popcorn-backend.herokuapp.com/api/scores/new', body)
       this.data.userId = response.data._id
+      this.$store.dispatch('resetState')
     }
     this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.polarocean, 'https://polar-ocean-73785.herokuapp.com/api/scores', limit)
