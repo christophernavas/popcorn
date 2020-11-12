@@ -137,12 +137,14 @@ export default {
   async created () {
     const limit = 10
     const user = this.$store.state.user
-    const body = {
-      username: user.username,
-      score: user.score
+    if (user.username && user.score) {
+      const body = {
+        username: user.username,
+        score: user.score
+      }
+      const response = await axios.post('https://wsf-popcorn-backend.herokuapp.com/api/scores/new', body)
+      this.data.userId = response.data._id
     }
-    const response = await axios.post('https://wsf-popcorn-backend.herokuapp.com/api/scores/new', body)
-    this.data.userId = response.data._id
     this.getQuizLeaderboard(this.data.popcorn, 'https://wsf-popcorn-backend.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.polarocean, 'https://polar-ocean-73785.herokuapp.com/api/scores', limit)
     this.getQuizLeaderboard(this.data.quizzpursuit, 'https://stagingquizzpursuit.herokuapp.com/api/scores', limit)

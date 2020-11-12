@@ -21,8 +21,7 @@ export default {
   methods: {
     onSubmit: function () {
       const username = this.username
-      const score = 0
-      this.$store.dispatch('createUser', { username, score })
+      this.$store.dispatch('createUser', username)
         .then(() => this.$router.push('/quiz'))
         .catch(err => console.log(err))
     },

@@ -70,6 +70,7 @@ export default {
             question.theme = questionTheme
             question.options = options
             question.model = null
+            this.shuffle(question.options)
             array.push(question)
           })
         })
@@ -103,7 +104,7 @@ export default {
       questions: []
     }
   },
-  mounted () {
+  created () {
     this.getQuestions(this.questions, 'https://wsf-popcorn-backend.herokuapp.com/api/questions')
     this.getQuestions(this.questions, 'https://polar-ocean-73785.herokuapp.com/api/questions/random', 'Polar Ocean')
     this.getQuestions(this.questions, 'https://stagingquizzpursuit.herokuapp.com/api/questions/random', 'Quizz Pursuit')
