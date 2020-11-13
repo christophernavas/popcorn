@@ -116,6 +116,7 @@ export default {
             this.shuffle(question.options)
             array.push(question)
           })
+          this.shuffle(array)
         })
         .catch(error => console.log(error))
       return array
@@ -159,6 +160,6 @@ export default {
     questions (value) {
       this.loaded = true
     }
-  }
+   }
 }
 </script>
