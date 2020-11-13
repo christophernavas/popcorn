@@ -160,6 +160,6 @@ export default {
     questions (value) {
       this.loaded = true
     }
-   }
+  }
 }
 </script>
