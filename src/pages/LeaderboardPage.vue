@@ -76,13 +76,8 @@ export default {
       axios
         .get(url)
         .then(response => {
-          let scores = {}
+          const scores = response.data.scores
           let ranking = 0
-          if (response.data.scores) {
-            scores = response.data.scores
-          } else {
-            scores = response.data.data
-          }
           scores.forEach(score => {
             // si user n'est pas dans le top :limit, on l'affiche en dessous du top :limit, donc à la suite du tableau
             // sinon, on affiche user dans le top :limit

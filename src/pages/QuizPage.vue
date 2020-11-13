@@ -154,7 +154,6 @@ export default {
     this.getQuestions(this.questions, 'https://polar-ocean-73785.herokuapp.com/api/questions/random', 'Polar Ocean')
     this.getQuestions(this.questions, 'https://stagingquizzpursuit.herokuapp.com/api/questions/random', 'Quizz Pursuit')
     this.getQuestions(this.questions, 'https://adley-quizz.herokuapp.com/api/questions/random', 'Adley Quizz')
-    this.shuffle(this.questions)
   },
   watch: {
     questions (value) {
