@@ -87,7 +87,7 @@ export default {
             // si user n'est pas dans le top :limit, on l'affiche en dessous du top :limit, donc à la suite du tableau
             // sinon, on affiche user dans le top :limit
             ranking += 1
-            if (popcorn && user.username && user.score && user.username === score.username && user.score === score.score && ranking > 10) {
+            if (popcorn && user.username != null && user.score != null && user.username === score.username && user.score === score.score && ranking > 10) {
               userData = {
                 ranking: ranking,
                 username: user.username,
@@ -105,7 +105,7 @@ export default {
             this.data.popcorn = table.slice(0, 10)
             this.$store.dispatch('resetState')
           }
-          if (userData != null) {
+          if (userData) {
             this.data.popcorn.push(userData)
           }
         })
@@ -158,7 +158,7 @@ export default {
   async created () {
     const limit = 10
     const user = this.$store.state.user
-    if (user.username && user.score) {
+    if (user.username != null && user.score != null) {
       const body = {
         username: user.username,
         score: user.score
