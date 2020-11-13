@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex column items-center justify-center" padding>
     <!-- content -->
-    <q-form @submit="onSubmit">
+    <q-form v-if="loaded" @submit="onSubmit">
       <div class="text-left">
         <q-card v-for="(question, index) in questions" :key="index" flat bordered class="custom-card">
           <q-card-section>
@@ -24,6 +24,49 @@
         <q-btn type="submit" color="secondary" label="Envoyer" size="20px" style="width: 250px;"/>
       </div>
     </q-form>
+
+    <!-- Skeleton when data is not loaded completely -->
+    <div v-else>
+      <q-card flat class="custom-card" style="min-height:360px;">
+        <q-skeleton height="50px" square />
+        <!-- <q-skeleton type="text" class="text-subtitle1" /> -->
+        <q-card-section>
+          <q-skeleton type="text" class="text-subtitle1" />
+        </q-card-section>
+        <q-card-section>
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+        </q-card-section>
+      </q-card>
+      <q-card flat class="custom-card" style="min-height:360px;">
+        <q-skeleton height="50px" square />
+        <!-- <q-skeleton type="text" class="text-subtitle1" /> -->
+        <q-card-section>
+          <q-skeleton type="text" class="text-subtitle1" />
+        </q-card-section>
+        <q-card-section>
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+        </q-card-section>
+      </q-card>
+      <q-card flat class="custom-card" style="min-height:360px;">
+        <q-skeleton height="50px" square />
+        <!-- <q-skeleton type="text" class="text-subtitle1" /> -->
+        <q-card-section>
+          <q-skeleton type="text" class="text-subtitle1" />
+        </q-card-section>
+        <q-card-section>
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+          <q-skeleton type="text" width="50%" class="text-subtitle1" />
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -101,7 +144,8 @@ export default {
   },
   data () {
     return {
-      questions: []
+      questions: [],
+      loaded: false
     }
   },
   created () {
@@ -110,6 +154,11 @@ export default {
     this.getQuestions(this.questions, 'https://stagingquizzpursuit.herokuapp.com/api/questions/random', 'Quizz Pursuit')
     this.getQuestions(this.questions, 'https://adley-quizz.herokuapp.com/api/questions/random', 'Adley Quizz')
     this.shuffle(this.questions)
+  },
+  watch: {
+    questions (value) {
+      this.loaded = true
+    }
   }
 }
 </script>
