@@ -5,7 +5,7 @@
       <div class="text-left">
         <q-card v-for="(question, index) in questions" :key="index" flat bordered class="custom-card">
           <q-card-section>
-            <div class="card-title">{{ question.theme }}</div>
+            <div class="card-title">{{ question.category }}</div>
           </q-card-section>
 
           <q-separator color="secondary" inset />
@@ -89,20 +89,18 @@ export default {
       }
       return array
     },
-    getQuestions (array, url, theme) {
+    getQuestions (array, url, category) {
       axios
         .get(url)
         .then(response => {
           const questions = response.data.questions
-          let questionTheme = ''
+          let questionCategory = null
           questions.forEach(question => {
             const options = []
-            if (question.theme) {
-              questionTheme = question.theme
-            } else if (theme) {
-              questionTheme = theme
+            if (category) {
+              questionCategory = category
             } else {
-              questionTheme = 'La Casa de Papel'
+              questionCategory = question.category
             }
             question.answers.forEach(answer => {
               options.push({
@@ -110,7 +108,7 @@ export default {
                 value: answer.answer
               })
             })
-            question.theme = questionTheme
+            question.category = questionCategory
             question.options = options
             question.model = null
             this.shuffle(question.options)
