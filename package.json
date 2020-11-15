@@ -1,8 +1,8 @@
 {
   "name": "popcorn",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "description": "A Quiz App",
+  "productName": "Popcorn",
   "author": "Christopher <christo.navas@hotmail.fr>",
   "private": true,
   "scripts": {
