@@ -132,7 +132,7 @@ export default {
         })
         nbQuestions += 1
       })
-      return (Math.round(nbCorrect / nbQuestions * 100))
+      return (Math.floor(nbCorrect / nbQuestions * 100))
     },
     onSubmit () {
       const score = this.calculateScore()
