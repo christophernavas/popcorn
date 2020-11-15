@@ -102,7 +102,6 @@ export default {
             // sinon, on affiche user dans le top :limit
             ranking += 1
             if (popcorn && user.username != null && user.score != null && user.username === score.username && user.score === score.score) {
-              console.log('test')
               userData = {
                 ranking: ranking,
                 username: user.username,
