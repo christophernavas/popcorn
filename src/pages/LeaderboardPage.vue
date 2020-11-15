@@ -96,15 +96,20 @@ export default {
         .then(response => {
           const scores = response.data.scores
           let ranking = 0
+          let isTopTen = false
           scores.forEach(score => {
             // si user n'est pas dans le top :limit, on l'affiche en dessous du top :limit, donc à la suite du tableau
             // sinon, on affiche user dans le top :limit
             ranking += 1
-            if (popcorn && user.username != null && user.score != null && user.username === score.username && user.score === score.score && ranking > 10) {
+            if (popcorn && user.username != null && user.score != null && user.username === score.username && user.score === score.score) {
               userData = {
                 ranking: ranking,
                 username: user.username,
                 score: user.score
+              }
+              if (ranking <= 10) {
+                isTopTen = true
+                table.push(userData)
               }
             } else {
               table.push({
@@ -116,11 +121,11 @@ export default {
           })
           if (popcorn) {
             this.data.popcorn = table.slice(0, 10)
+            if (isTopTen === false) {
+              this.data.popcorn.push(userData)
+            }
             this.$store.dispatch('resetState')
             this.loaded = true
-          }
-          if (userData) {
-            this.data.popcorn.push(userData)
             this.selected.push(userData)
           }
         })
