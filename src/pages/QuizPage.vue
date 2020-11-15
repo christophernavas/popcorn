@@ -27,7 +27,7 @@
 
     <!-- Skeleton when data is not loaded completely -->
     <div v-else>
-      <q-card flat class="custom-card" style="min-height:360px;">
+      <q-card flat class="custom-card" style="min-height:300px;">
         <q-skeleton height="50px" square />
         <!-- <q-skeleton type="text" class="text-subtitle1" /> -->
         <q-card-section>

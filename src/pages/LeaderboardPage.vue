@@ -12,8 +12,8 @@
             class="custom-select q-pb-xl" />
         </div>
       </div>
-      <div style="max-width: 600px;margin: auto;">
-        <q-table :data="data.popcorn" :columns="columns" row-key="name" v-if="showPopcorn" hide-bottom virtual-scroll
+      <div v-if="loaded" ref="popcorn"  style="max-width: 600px;margin: auto;">
+        <q-table row-key="ranking" selection="single" :selected.sync="selected" :data="data.popcorn" :columns="columns" v-if="showPopcorn" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
         <q-table :data="data.polarocean" :columns="columns" row-key="name" v-if="showPolarOcean" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
@@ -21,7 +21,10 @@
           :pagination.sync="pagination" />
         <q-table :data="data.adleyquizz" :columns="columns" row-key="name" v-if="showAdleyQuizz" hide-bottom virtual-scroll
           :pagination.sync="pagination" />
-        </div>
+      </div>
+      <div v-else style="max-width: 600px;margin: auto;">
+        <SkeletonTable/>
+      </div>
       <div class="q-pt-xl">
         <q-btn to="/" color="secondary" label="Rejouer" size="20px" style="width: 250px" />
       </div>
@@ -31,35 +34,50 @@
 
 <script>
 const axios = require('axios')
+import SkeletonTable from '../components/SkeletonTable'
 
 export default {
+  components: {
+    SkeletonTable
+  },
   methods: {
     onValueChange (val) {
       switch (val) {
         case 'Popcorn':
+          this.checkDataloaded(this.data.popcorn)
           this.showPopcorn = true
           this.showAdleyQuizz = false
           this.showQuizzPursuit = false
           this.showPolarOcean = false
           break
         case 'Polar Ocean':
+          this.checkDataloaded(this.data.polarocean)
           this.showPopcorn = false
           this.showAdleyQuizz = false
           this.showQuizzPursuit = false
           this.showPolarOcean = true
           break
         case 'Quizz Pursuit':
+          this.checkDataloaded(this.data.quizzpursuit)
           this.showPopcorn = false
           this.showAdleyQuizz = false
           this.showQuizzPursuit = true
           this.showPolarOcean = false
           break
         case 'Adley Quizz':
+          this.checkDataloaded(this.data.adleyquizz)
           this.showPopcorn = false
           this.showAdleyQuizz = true
           this.showQuizzPursuit = false
           this.showPolarOcean = false
           break
+      }
+    },
+    checkDataloaded (data) {
+      if (data.length > 0) {
+        this.loaded = true
+      } else {
+        this.loaded = false
       }
     },
     getQuizLeaderboard (table, endpoint, limit) {
@@ -99,9 +117,11 @@ export default {
           if (popcorn) {
             this.data.popcorn = table.slice(0, 10)
             this.$store.dispatch('resetState')
+            this.loaded = true
           }
           if (userData) {
             this.data.popcorn.push(userData)
+            this.selected.push(userData)
           }
         })
         .catch(error => console.log(error))
@@ -114,6 +134,8 @@ export default {
       showPolarOcean: false,
       showQuizzPursuit: false,
       showAdleyQuizz: false,
+      loaded: false,
+      selected: [],
       pagination: {
         rowsPerPage: 0
       },
