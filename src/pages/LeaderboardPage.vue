@@ -121,12 +121,14 @@ export default {
           })
           if (popcorn) {
             this.data.popcorn = table.slice(0, 10)
-            if (isTopTen === false) {
-              this.data.popcorn.push(userData)
+            if (userData != null) {
+              if (isTopTen === false) {
+                this.data.popcorn.push(userData)
+              }
+              this.selected.push(userData)
             }
             this.$store.dispatch('resetState')
             this.loaded = true
-            this.selected.push(userData)
           }
         })
         .catch(error => console.log(error))
